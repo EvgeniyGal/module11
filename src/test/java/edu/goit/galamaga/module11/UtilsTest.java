@@ -1,12 +1,12 @@
 package edu.goit.galamaga.module11;
 
 import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -15,8 +15,8 @@ class UtilsTest {
     @Test
     void selectOddNames() {
 
-        ArrayList<String> names = new ArrayList<>(Arrays.asList("1. Ivan",
-                "2. Peter", "3. Susanna", "4. John", "5. Ted", "6. Anna", "7. Julia"));
+        ArrayList<String> names = new ArrayList<>(Arrays.asList("Ivan",
+                "Peter", "Susanna", "John", "Ted", "Anna", "Julia"));
 
         String actualNamesLine = Utils.selectOddNames(names);
 
@@ -55,9 +55,36 @@ class UtilsTest {
     void getRandomStreamTest() {
 
         Stream<Long> actualStream = Utils.getRandomStream(11, (long) Math.pow(2, 48), 0);
-
-        assertThat(actualStream).containsExactly(11L, 277363943098L, 11718085204285L,
+        Stream<Long> expectedStream = Stream.of(11L, 277363943098L, 11718085204285L,
                 49720483695876L, 102626409374399L);
 
+        Iterator<?> iteratorActual = actualStream.iterator(), iteratorExpected = expectedStream.iterator();
+
+        while(iteratorActual.hasNext() && iteratorExpected.hasNext()){
+            assertEquals(iteratorActual.next(), iteratorExpected.next());
+        }
+
+        assert !iteratorActual.hasNext() && !iteratorExpected.hasNext();
+
     }
+
+    @Test
+    void zip() {
+
+        Stream<Double> stream1 = Stream.of(3.2, 6.9, 9.5, -65.0);
+        Stream<Double> stream2 = Stream.of(-15.2, 56.9);
+
+        Stream<Double> actualStream = Utils.zip(stream1,stream2);
+        Stream<Double> expectedStream = Stream.of(3.2, -15.2,6.9, 56.9);
+
+        Iterator<?> iteratorActual = actualStream.iterator(), iteratorExpected = expectedStream.iterator();
+
+        while(iteratorActual.hasNext() && iteratorExpected.hasNext()){
+            assertEquals(iteratorActual.next(), iteratorExpected.next());
+        }
+
+        assert !iteratorActual.hasNext() && !iteratorExpected.hasNext();
+
+    }
+
 }

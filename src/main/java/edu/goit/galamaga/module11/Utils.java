@@ -8,16 +8,24 @@ public class Utils {
 
     public static String selectOddNames(List<String> names) {
 
-        return names.stream().
-                filter((name) -> Integer.parseInt(name.replaceAll("\\D+", "")) % 2 != 0).
-                collect(Collectors.joining(", "));
+        List<String> oddNames = new ArrayList<>();
+
+        for (int i = 0; i < names.size(); i++) {
+
+            if (i % 2 == 0) {
+                oddNames.add((i + 1) + ". " + names.get(i));
+            }
+
+        }
+
+        return oddNames.stream().collect(Collectors.joining(", "));
 
     }
 
     public static List<String> listConverter(List<String> names) {
 
-        return names.stream().map(String::toUpperCase).
-                sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        return names.stream().map(String::toUpperCase).sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
 
     }
 
@@ -42,16 +50,32 @@ public class Utils {
 
         long prevElement = seed;
 
-//        Stream<Long> outStream = (Stream<Long>) Stream.builder();
         List<Long> randomNumbers = new ArrayList<>();
 
         for (int i = 0; i < limit; i++) {
-
             prevElement = (a * prevElement + c) % m;
             randomNumbers.add(prevElement);
         }
 
         return randomNumbers.stream();
+    }
+
+    public static <T> Stream<T> zip(Stream<T> first, Stream<T> second) {
+
+        List<T> firstList = first.toList();
+        List<T> secondList = second.toList();
+
+        int minStreamSize = Math.min(firstList.size(), secondList.size());
+
+        List<T> resultList = new ArrayList<>();
+
+        for (int i = 0; i < minStreamSize; i++) {
+            resultList.add(firstList.get(i));
+            resultList.add(secondList.get(i));
+        }
+
+        return resultList.stream();
+
     }
 
 }
